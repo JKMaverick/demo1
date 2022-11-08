@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form th:action="@{/translations/start}" method="post">
+    <input type="text" name="word">
+    <input type="submit" value="Wyslij">
+  </form>
+</body>
+</html>

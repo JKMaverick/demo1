@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table>
+    <thead>
+        <tr>
+            <th>Word</th>
+            <th>Phonetic</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${word1.word}"></td>
+        <td th:text="${word1.phonetic}"></td>
+        <td>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Part of speech</th>
+                        <th>Synonyms</th>
+                        <th>Definitions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="meaning : ${word1.meanings}">
+                        <td th:text="${meaning.partOfSpeech}"></td>
+                        <td>
+                            <table>
+                                <tbody>
+                                    <tr th:each="synonym : ${meaning.synonyms}">
+                                        <td th:text="${synonym}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+<p th:text="'Word: ' + ${word1.word}"></p>
+<p th:text="'Phonetic: ' + ${word1.phonetic}"></p>
+<th:block th:each="meaning : ${word1.meanings}">
+    <p th:text="${meaning.partOfSpeech}"></p>
+    <th:block th:each="synonym : ${meaning.synonyms}">
+        <p th:text="${synonym}"></p>
+    </th:block>
+</th:block>
+
+
+</body>
+</html>
