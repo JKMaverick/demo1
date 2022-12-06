@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <employee>
-    <department>
+    <department style="black">
         <id>101</id>
         <name>IT</name>
+    </department>
+    <department>
+        <id>202</id>
+        <name>MARKETING</name>
+        <value>3434</value>
     </department>
     <firstName>Lokesh</firstName>
     <id>1</id>

@@ -8,7 +8,8 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		XmlParser xmlParser = new XmlParser();
 		xmlParser.start();
-		SpringApplication.run(DemoApplication.class, args);
+		System.out.println();
+//		SpringApplication.run(DemoApplication.class, args);
 	}
 
 

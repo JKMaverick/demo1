@@ -15,7 +15,7 @@ public class Employee implements Serializable {
     private Integer id;
     private String firstName;
     private String lastName;
-    private Department department;
+    private Department[] department;
 
     public Integer getId() {
         return id;
@@ -41,11 +41,11 @@ public class Employee implements Serializable {
         this.lastName = lastName;
     }
 
-    public Department getDepartment() {
+    public Department[] getDepartment() {
         return department;
     }
 
-    public void setDepartment(Department department) {
+    public void setDepartment(Department[] department) {
         this.department = department;
     }
 
