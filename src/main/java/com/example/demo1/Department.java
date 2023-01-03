@@ -5,6 +5,7 @@ import com.sun.xml.txw2.annotation.XmlValue;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
+// TODO do usuniecia?
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Department implements Serializable {
     Integer id;

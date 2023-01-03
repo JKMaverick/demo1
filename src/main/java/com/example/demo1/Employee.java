@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
+// TODO do usuniecia?
 @XmlRootElement(name = "employee")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class Employee implements Serializable {

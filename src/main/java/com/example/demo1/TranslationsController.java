@@ -1,17 +1,14 @@
 package com.example.demo1;
 
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.example.demo1.model.json.Word;
+import com.example.demo1.repository.WordRepository;
+import com.example.demo1.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.lang.reflect.Field;
 
 @Controller
 @RequestMapping("translations")
@@ -19,6 +16,8 @@ public class TranslationsController {
 
     private String externalApiURL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
+    @Autowired
+    private WordService wordService;
 
     @GetMapping
     public ResponseEntity<String> translations(@RequestParam(value = "word") String word) {
@@ -67,6 +66,14 @@ public class TranslationsController {
         return "indexTest";
     }
 
+    @GetMapping("saveWord")
+    public ResponseEntity<com.example.demo1.model.db.Word> saveWord(@RequestParam(value = "word") String word) {
+        com.example.demo1.model.db.Word dbWord = new com.example.demo1.model.db.Word();
+        dbWord.setWord(word);
+        dbWord.setPronunciation("abc");
+        wordService.saveWord(dbWord);
+        return ResponseEntity.ok(dbWord);
+    }
 
 
 }
