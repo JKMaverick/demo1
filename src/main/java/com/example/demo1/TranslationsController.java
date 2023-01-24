@@ -4,6 +4,7 @@ import com.example.demo1.model.json.Word;
 import com.example.demo1.repository.WordRepository;
 import com.example.demo1.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,6 +74,18 @@ public class TranslationsController {
         dbWord.setPronunciation("abc");
         wordService.saveWord(dbWord);
         return ResponseEntity.ok(dbWord);
+    }
+    @GetMapping("search")
+    public ResponseEntity<com.example.demo1.model.db.Word> search(@RequestParam(value = "word") String word){
+        com.example.demo1.model.db.Word dbWord = wordService.search(word);
+        ResponseEntity<Word[]> responseEntity = translationsV2(word);
+        if(dbWord == null){
+            ResponseEntity<com.example.demo1.model.db.Word> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return response;
+        } else {
+            return ResponseEntity.ok(dbWord);
+        }
+
     }
 
 

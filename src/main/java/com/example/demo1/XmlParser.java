@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,22 +29,37 @@ public class XmlParser {
     }
 
     public List<Word> start() {
-        File file = new File(this.getClass().getResource("/static/a.xml").getPath());
+        List<Word> entities = new ArrayList<>();
+        Unmarshaller unmarshaller;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Div.class);
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Div div = (Div) unmarshaller.unmarshal(file);
-            // TODO sprawdzic czy nie brakuje jeszcze jakiegos tagu/wartosci w klasach
-            /**
-             * Word: id, word, pronunciation, translations (bez gramGrp bo ona nie musi tu wystapic - do sprawdzenia gdzie moze)
-             * Translation: id, word_id, type, partOfSpeech (gramGrp), quote
-             */
-
-            List<Word> entitiesFromDiv = getEntitiesFromDiv(div);
-            return entitiesFromDiv;
+            unmarshaller = jaxbContext.createUnmarshaller();
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+
+        for(char l = 'a'; l <= 'z'; l++){
+            URL resource = this.getClass().getResource("/static/" + l + ".xml");
+            if (null == resource) {
+                System.out.println("Provided path for letter " + l + " does not exist");
+                continue;
+            }
+            File file = new File(resource.getPath());
+            try {
+                Div div = (Div) unmarshaller.unmarshal(file);
+                // TODO sprawdzic czy nie brakuje jeszcze jakiegos tagu/wartosci w klasach
+                /**
+                 * Word: id, word, pronunciation, translations (bez gramGrp bo ona nie musi tu wystapic - do sprawdzenia gdzie moze)
+                 * Translation: id, word_id, type, partOfSpeech (gramGrp), quote
+                 */
+                entities.addAll(getEntitiesFromDiv(div));
+            } catch (JAXBException e) {
+                System.out.println("File's tags are incorrect for letter " + l + ", cause: " + e.getMessage());
+                System.out.printf("File's tags are incorrect for letter %c, cause: %s\n", l, e.getMessage()); // print z formatowaniem (jak w C++)
+            }
+        }
+
+        return entities;
     }
     private List<Word> getEntitiesFromDiv(Div div) {
         List<Word> words = new ArrayList<>();

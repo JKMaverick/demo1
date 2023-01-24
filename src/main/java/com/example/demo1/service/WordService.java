@@ -3,6 +3,8 @@ package com.example.demo1.service;
 import com.example.demo1.model.db.Word;
 import com.example.demo1.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,4 +24,12 @@ public class WordService {
         }
     }
 
+    @Nullable
+    public Word search(String word) {
+        Optional<Word> optionalWord = wordRepository.findOneByWord(word);
+        if (optionalWord.isPresent()) {
+            return optionalWord.get();
+        }
+        return null;
+    }
 }
