@@ -1,5 +1,6 @@
 package com.example.demo1;
 
+import com.example.demo1.model.CombinedWord;
 import com.example.demo1.model.json.Word;
 import com.example.demo1.repository.WordRepository;
 import com.example.demo1.service.WordService;
@@ -81,6 +82,9 @@ public class TranslationsController {
     public ResponseEntity<List<com.example.demo1.model.db.Word>> search(@RequestParam(value = "word") String word){
         List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
         ResponseEntity<Word[]> responseEntity = translationsV2(word);
+        Word[] wordBody = responseEntity.getBody();
+        CombinedWord combinedWord = new CombinedWord(wordBody, dbWord);
+        System.out.println(combinedWord);
         // TODO CombinedWord
         if(dbWord == null){
             ResponseEntity<List<com.example.demo1.model.db.Word>> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
