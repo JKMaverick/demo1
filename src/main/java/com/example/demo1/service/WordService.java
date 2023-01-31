@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,9 +16,8 @@ public class WordService {
     WordRepository wordRepository;
 
     public void saveWord(Word word){
-        Optional<Word> optionalWord = wordRepository.findOneByWord(word.getWord());
-        if(optionalWord.isPresent()) {
-            Word dbWord = optionalWord.get();
+        List<Word> words = wordRepository.findAllByWord(word.getWord());
+        if(!words.isEmpty()) {
             // TODO dopisac nowe dane do rekordu w bazie
         } else {
             wordRepository.save(word);
@@ -25,10 +25,10 @@ public class WordService {
     }
 
     @Nullable
-    public Word search(String word) {
-        Optional<Word> optionalWord = wordRepository.findOneByWord(word);
-        if (optionalWord.isPresent()) {
-            return optionalWord.get();
+    public List<Word> search(String word) {
+        List<Word> words = wordRepository.findAllByWord(word);
+        if (words.size() > 0) {
+            return words;
         }
         return null;
     }

@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("translations")
 public class TranslationsController {
@@ -76,11 +78,12 @@ public class TranslationsController {
         return ResponseEntity.ok(dbWord);
     }
     @GetMapping("search")
-    public ResponseEntity<com.example.demo1.model.db.Word> search(@RequestParam(value = "word") String word){
-        com.example.demo1.model.db.Word dbWord = wordService.search(word);
+    public ResponseEntity<List<com.example.demo1.model.db.Word>> search(@RequestParam(value = "word") String word){
+        List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
         ResponseEntity<Word[]> responseEntity = translationsV2(word);
+        // TODO CombinedWord
         if(dbWord == null){
-            ResponseEntity<com.example.demo1.model.db.Word> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ResponseEntity<List<com.example.demo1.model.db.Word>> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return response;
         } else {
             return ResponseEntity.ok(dbWord);
