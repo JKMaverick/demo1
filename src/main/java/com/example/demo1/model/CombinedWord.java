@@ -3,11 +3,16 @@ package com.example.demo1.model;
 import com.example.demo1.model.db.Translation;
 import com.example.demo1.model.db.Word;
 import com.example.demo1.model.json.Meaning;
+import lombok.Data;
+import org.springframework.util.CollectionUtils;
+import org.thymeleaf.util.ArrayUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 public class CombinedWord {
 
     private List<Translation> translations;
@@ -34,26 +39,31 @@ public class CombinedWord {
 //            }
 //        }
         // sposob 3
-        for (Word word : wordsFromDatabase) {
-            this.translations.addAll(word.getTranslations());
-        }
-        // sposob 4
+        if (!CollectionUtils.isEmpty(wordsFromDatabase)) {
+            // if(wordsFromDatabase != null && !wordsFromDatabase.isEmpty()) {
+            for (Word word : wordsFromDatabase) {
+                this.translations.addAll(word.getTranslations());
+            }
+            // sposob 4
 //        this.translations = wordsFromDatabase.stream()
 //                .map(Word::getTranslations)
 //                .flatMap(List::stream)
 //                .collect(Collectors.toList());
-        //Pronunciation
-        this.pronunciation = wordsFromDatabase.get(0).getPronunciation();
+            //Pronunciation
+            this.pronunciation = wordsFromDatabase.get(0).getPronunciation();
 
-        //Word
-        this.word = wordsFromDatabase.get(0).getWord();
+            //Word
+            this.word = wordsFromDatabase.get(0).getWord();
+        }
 
         //Meaning
-        this.meanings = new ArrayList<>();
-        for (com.example.demo1.model.json.Word word1 : wordsFromExternalApi) {
-            this.meanings.addAll(List.of(word1.getMeanings()));
+        if(!ArrayUtils.isEmpty(wordsFromExternalApi)) {
+            this.meanings = new ArrayList<>();
+            for (com.example.demo1.model.json.Word word1 : wordsFromExternalApi) {
+                this.meanings.addAll(List.of(word1.getMeanings()));
+            }
+            this.phonetic = wordsFromExternalApi[0].getPhonetic();
         }
-        this.phonetic = wordsFromExternalApi[0].getPhonetic();
 
     }
 

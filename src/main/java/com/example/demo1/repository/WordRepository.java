@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface WordRepository extends JpaRepository<Word, Long> {
     List<Word> findAllByWord(String word);
 
-    // TODO sprawdzic w bazie czy istnieja dwa wpisy z tym slowem
+
     // ^ zadanie na sprawdzenie w SQLu
     // SELECT word, COUNT(word)
     // FROM words

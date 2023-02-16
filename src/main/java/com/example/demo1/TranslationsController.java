@@ -6,11 +6,14 @@ import com.example.demo1.repository.WordRepository;
 import com.example.demo1.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -78,19 +81,36 @@ public class TranslationsController {
         wordService.saveWord(dbWord);
         return ResponseEntity.ok(dbWord);
     }
+
+    public ModelAndView search() {
+        ModelAndView mav = new ModelAndView("result"); // "result" -> inny, nowy szablon
+        mav.addObject("combinedWord", new CombinedWord(null, null));
+        return mav;
+    }
+
+    /*
+    TODO przerobienie search aby zwracal szablon
+    ResponseEntity<CombinedWord> -> ModelAndView analogicznie jak wyzej
+     */
     @GetMapping("search")
-    public ResponseEntity<List<com.example.demo1.model.db.Word>> search(@RequestParam(value = "word") String word){
+    public ResponseEntity<CombinedWord> search(@RequestParam(value = "word") String word){
         List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
-        ResponseEntity<Word[]> responseEntity = translationsV2(word);
-        Word[] wordBody = responseEntity.getBody();
+        Word[] wordBody = null;
+        try {
+            ResponseEntity<Word[]> responseEntity = translationsV2(word);
+            wordBody = responseEntity.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Blad przy pobieraniu z api");
+        }
+
         CombinedWord combinedWord = new CombinedWord(wordBody, dbWord);
         System.out.println(combinedWord);
-        // TODO CombinedWord
-        if(dbWord == null){
-            ResponseEntity<List<com.example.demo1.model.db.Word>> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(dbWord == null && wordBody == null){
+            // ResponseEntity.status(HttpStatus.NOT_FOUND).body(combinedWord);
+            ResponseEntity<CombinedWord> response = ResponseEntity.status(HttpStatus.NOT_FOUND).body(combinedWord); //new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return response;
         } else {
-            return ResponseEntity.ok(dbWord);
+            return ResponseEntity.ok(combinedWord);
         }
 
     }
