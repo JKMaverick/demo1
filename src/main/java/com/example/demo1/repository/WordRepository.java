@@ -12,7 +12,10 @@ import java.util.Optional;
 public interface WordRepository extends JpaRepository<Word, Long> {
     List<Word> findAllByWord(String word);
 
+    @Query(value = "SELECT MAX(id) FROM WORDS", nativeQuery = true)
+    Long findMaxID();
 
+    Optional<Word> findOneById(Long id);
     // ^ zadanie na sprawdzenie w SQLu
     // SELECT word, COUNT(word)
     // FROM words

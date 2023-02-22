@@ -78,6 +78,7 @@ public class XmlParser {
     }
 
     // TODO do poprawy part of speech (nie zawsze odczytuje)
+    // TODO Znaleziony nowy znacznik w pliku xml pod nazwą "usg"!!!!
     private static void loadTranslationsFromSenses(Entry entry, List<Translation> translations, Sense[] senses) {
         for(Sense sense : senses){
             if(sense.getSenses() != null){

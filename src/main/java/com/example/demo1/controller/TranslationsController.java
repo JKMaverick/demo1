@@ -1,4 +1,4 @@
-package com.example.demo1;
+package com.example.demo1.controller;
 
 import com.example.demo1.model.CombinedWord;
 import com.example.demo1.model.json.Word;
@@ -82,9 +82,21 @@ public class TranslationsController {
         return ResponseEntity.ok(dbWord);
     }
 
-    public ModelAndView search() {
-        ModelAndView mav = new ModelAndView("result"); // "result" -> inny, nowy szablon
-        mav.addObject("combinedWord", new CombinedWord(null, null));
+    @GetMapping("search2")
+    public ModelAndView search(@RequestParam(value = "word") String word) {
+        List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
+        Word[] wordBody = null;
+        try {
+            ResponseEntity<Word[]> responseEntity = translationsV2(word);
+            wordBody = responseEntity.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Blad przy pobieraniu z api");
+        }
+
+        CombinedWord combinedWord = new CombinedWord(wordBody, dbWord);
+
+        ModelAndView mav = new ModelAndView("finalResult"); // "result" -> inny, nowy szablon
+        mav.addObject("combinedWord", combinedWord);
         return mav;
     }
 
@@ -93,7 +105,7 @@ public class TranslationsController {
     ResponseEntity<CombinedWord> -> ModelAndView analogicznie jak wyzej
      */
     @GetMapping("search")
-    public ResponseEntity<CombinedWord> search(@RequestParam(value = "word") String word){
+    public ResponseEntity<CombinedWord> search_old(@RequestParam(value = "word") String word){
         List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
         Word[] wordBody = null;
         try {

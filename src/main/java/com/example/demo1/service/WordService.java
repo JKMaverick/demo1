@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class WordService {
@@ -31,5 +33,24 @@ public class WordService {
             return words;
         }
         return null;
+    }
+
+    public Long maxID(){
+        return wordRepository.findMaxID();
+    }
+
+    public List<Word> getRandomWords(int numberOfWords){
+        Random random = new Random();
+        Long maxId = wordRepository.findMaxID();
+        List<Word> words = new ArrayList<>();
+        while(words.size()<numberOfWords){
+            Long randomId = random.nextLong() % maxId + 1;
+            Optional<Word> wordOpt = wordRepository.findOneById(randomId);
+            if(wordOpt.isPresent()) {
+                words.add(wordOpt.get());
+            }
+        }
+
+        return words;
     }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table, th, td{
+        border: 1px solid black;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+    <p th:text="${combinedWord.word}"></p>
+    <p th:text="${combinedWord.phonetic}"></p>
+    <p th:text="${combinedWord.pronunciation}"></p>
+    <table class="table">
+        <tr>
+            <th>Type</th>
+            <th>Translation</th>
+        </tr>
+        <tr th:each="translation:${combinedWord.translations}"> <!-- opcjonalnie th:block z th:each zamiast tr -->
+            <td th:text="${translation.type}"></td>
+            <td th:text="${translation.quote}"></td>
+        </tr>
+    </table>
+    <p>Definicja</p>
+    <table class="table" th:each="meaning:${combinedWord.meanings}">
+        <tr th:each="definition:${meaning.definitions}">
+            <td th:text="${definition.definition}"></td>
+            <td th:text="${definition.example}"></td>
+        </tr>
+    </table>
+    <p>Synonimy</p>
+    <table class="table" th:each="meaning:${combinedWord.meanings}">
+        <tr th:each="synonym:${meaning.synonyms}">
+            <td th:text="${synonym}"></td>
+        </tr>
+    </table>
+</body>
+</html>
