@@ -3,9 +3,9 @@ package com.example.demo1.service;
 import com.example.demo1.model.db.Word;
 import com.example.demo1.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +39,14 @@ public class WordService {
         return wordRepository.findMaxID();
     }
 
-    public List<Word> getRandomWords(int numberOfWords){
+    public List<Word> getRandomWordsWithTranslations(int numberOfWords){
         Random random = new Random();
         Long maxId = wordRepository.findMaxID();
         List<Word> words = new ArrayList<>();
         while(words.size()<numberOfWords){
             Long randomId = random.nextLong() % maxId + 1;
             Optional<Word> wordOpt = wordRepository.findOneById(randomId);
-            if(wordOpt.isPresent()) {
+            if(wordOpt.isPresent() && !CollectionUtils.isEmpty(wordOpt.get().getTranslations())) {
                 words.add(wordOpt.get());
             }
         }
