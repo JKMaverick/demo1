@@ -4,9 +4,14 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// TODO Entity
 @Data
 public class QuizQuestion {
     private String word;
+
+    // TODO
+    // mozna tlumaczenia trzymac jako kilka osobnych pol lub jedno z wartosciami rozdzielonymi np. srednikiem
     private List<String> translations;
     private int correctAnswer;
 

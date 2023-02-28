@@ -6,9 +6,19 @@
 
 </head>
 <body>
-    <th:block th:each="question:${quiz.quizQuestions}">
-        <p th:text ="${question.word}"></p>
-        <p th:text ="${question.translations[0]}"></p>
-    </th:block>
+    <form th:action="@{/quiz/randomQuiz}" th:object="${quizAnswers}" method="post">
+        <th:block th:each="question : ${quiz.quizQuestions}">
+            <p th:text ="${question.word}"></p>
+            <select th:field="*{answerList[__${questionStat.index}__]}">
+                <option th:value="-1" selected disabled hidden>Wybierz słowo</option>
+                <option th:value="0" th:text ="${question.translations[0]}"></option>
+                <option th:value="1" th:text ="${question.translations[1]}"></option>
+                <option th:value="2" th:text ="${question.translations[2]}"></option>
+                <option th:value="3" th:text ="${question.translations[3]}"></option>
+            </select>
+        </th:block>
+        </br>
+        <input th:value="Send" type="submit"/>
+    </form>
 </body>
 </html>
