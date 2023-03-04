@@ -2,8 +2,11 @@ package com.example.demo1.service;
 
 import com.example.demo1.model.Quiz;
 import com.example.demo1.model.QuizQuestion;
+import com.example.demo1.model.db.QuizModel;
+import com.example.demo1.model.db.QuizQuestionModel;
 import com.example.demo1.model.db.Translation;
 import com.example.demo1.model.db.Word;
+import com.example.demo1.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.Random;
 @Service
 public class QuizService {
 
+    @Autowired
+    private QuizRepository quizRepository;
     @Autowired
     private WordService wordService;
 
@@ -47,5 +52,21 @@ public class QuizService {
         Collections.shuffle(quizQuestion.getTranslations());
         quizQuestion.setCorrectAnswer(quizQuestion.getTranslations().indexOf(rightTranslation));
         return quizQuestion;
+    }
+    public void addToDB(Quiz quiz){
+        QuizModel quizModel = new QuizModel();
+        List<QuizQuestionModel> quizQuestionModelList = new ArrayList<>();
+        for(QuizQuestion quizQuestion :quiz.getQuizQuestions()){
+            QuizQuestionModel quizQuestionModel = new QuizQuestionModel();
+            quizQuestionModel.setWord(quizQuestion.getWord());
+            quizQuestionModel.setAnswer1(quizQuestion.getTranslations().get(0));
+            quizQuestionModel.setAnswer2(quizQuestion.getTranslations().get(1));
+            quizQuestionModel.setAnswer3(quizQuestion.getTranslations().get(2));
+            quizQuestionModel.setAnswer4(quizQuestion.getTranslations().get(3));
+            quizQuestionModel.setCorrectAnswer(quizQuestion.getCorrectAnswer());
+            quizQuestionModelList.add(quizQuestionModel);
+        }
+        quizModel.setQuizQuestionModelList(quizQuestionModelList);
+        quizRepository.save(quizModel);
     }
 }

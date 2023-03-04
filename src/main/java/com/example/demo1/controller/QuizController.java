@@ -1,7 +1,10 @@
 package com.example.demo1.controller;
 
+import com.example.demo1.model.Quiz;
 import com.example.demo1.model.QuizAnswers;
+import com.example.demo1.model.db.QuizModel;
 import com.example.demo1.model.db.Word;
+import com.example.demo1.repository.QuizRepository;
 import com.example.demo1.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +36,11 @@ public class QuizController {
     @GetMapping("/randomQuiz")
     public ModelAndView randomQuiz(){
         ModelAndView mav = new ModelAndView("randomQuiz");
-        mav.addObject("quiz",quizService.generateQuiz());
+        Quiz quiz = quizService.generateQuiz();
+        mav.addObject("quiz",quiz);
         mav.addObject("quizAnswers", new QuizAnswers());
         System.out.println();
+        quizService.addToDB(quiz);
         return mav;
     }
 
