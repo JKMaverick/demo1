@@ -1,6 +1,8 @@
 package com.example.demo1.service;
 
+import com.example.demo1.model.db.SearchedWord;
 import com.example.demo1.model.db.Word;
+import com.example.demo1.repository.SearchedWordRepository;
 import com.example.demo1.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -17,6 +19,9 @@ public class WordService {
     @Autowired
     WordRepository wordRepository;
 
+    @Autowired
+    SearchedWordService searchedWordService;
+
     public void saveWord(Word word){
         List<Word> words = wordRepository.findAllByWord(word.getWord());
         if(!words.isEmpty()) {
@@ -30,6 +35,7 @@ public class WordService {
     public List<Word> search(String word) {
         List<Word> words = wordRepository.findAllByWord(word);
         if (words.size() > 0) {
+            searchedWordService.create(words.get(0).getId());
             return words;
         }
         return null;
@@ -51,6 +57,17 @@ public class WordService {
             }
         }
 
+        return words;
+    }
+    public List<Word> getWordListFromSearchedWordsList(){
+        List<SearchedWord> searchedWordsList = searchedWordService.ListWithSearchedWords();
+        List<Word> words = new ArrayList<>();
+        for(SearchedWord searchedWord: searchedWordsList){
+            Optional<Word> word = wordRepository.findOneById(searchedWord.getWordId());
+            if(word.isPresent()){
+                words.add(word.get());
+            }
+        }
         return words;
     }
 }

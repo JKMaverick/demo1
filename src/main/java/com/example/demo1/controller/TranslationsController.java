@@ -1,8 +1,10 @@
 package com.example.demo1.controller;
 
 import com.example.demo1.model.CombinedWord;
+import com.example.demo1.model.db.SearchedWord;
 import com.example.demo1.model.json.Word;
 import com.example.demo1.repository.WordRepository;
+import com.example.demo1.service.SearchedWordService;
 import com.example.demo1.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class TranslationsController {
 
     @Autowired
     private WordService wordService;
+
+    @Autowired
+    private SearchedWordService searchedWordService;
 
     @GetMapping
     public ResponseEntity<String> translations(@RequestParam(value = "word") String word) {
@@ -84,6 +89,11 @@ public class TranslationsController {
 
     @GetMapping("search2")
     public ModelAndView search(@RequestParam(value = "word") String word) {
+        /*
+        1 dog_id 10
+        2 cat_id 1
+        3 turtle_id 1
+         */
         List<com.example.demo1.model.db.Word> dbWord = wordService.search(word);
         Word[] wordBody = null;
         try {
@@ -92,7 +102,6 @@ public class TranslationsController {
         } catch (HttpClientErrorException e) {
             System.out.println("Blad przy pobieraniu z api");
         }
-
         CombinedWord combinedWord = new CombinedWord(wordBody, dbWord);
 
         ModelAndView mav = new ModelAndView("finalResult"); // "result" -> inny, nowy szablon

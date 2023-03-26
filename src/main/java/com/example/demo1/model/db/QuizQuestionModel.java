@@ -9,6 +9,12 @@ import javax.persistence.*;
 @Table(name = "quizQuestion")
 public class QuizQuestionModel {
 
+    // 123, 1, word, answer1
+    // 124, 1, word, answer2
+    // 125, 1, word, answer3
+    // 126, 1, word, answer4
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <table>
+
+        <!--
+        petla na 10 obrotow
+        dla kazdego obrotu jeden wiersz (po jednym dla slowa) - po jednym znaczniku tr
+        w kazdym wierszu: slowo, odpowiedz, prawidlowa odpowiedz (3 kolumny - 3 znaczniki td)
+
+        odpowiedzi to lista intow z numerkiem udzielonej odpowiedzi
+        -->
+      <tr>
+          <th>Word</th>
+          <th>Answer</th>
+          <th>Correct answer</th>
+      </tr>
+      <th:block th:each="quizQuestion : ${quiz.quizQuestions}">
+          <tr th:with="quizQuestionIndex = ${quizAnswers.answerList[__${quizQuestionStat.index}__]}">
+              <td th:text="${quizQuestion.word}"></td>
+              <td th:text="${quizQuestion.translations[__${quizQuestionIndex}__]}"></td>
+              <td th:text="${quizQuestion.translations[__${quizQuestion.correctAnswer}__]}"></td>
+          </tr>
+      </th:block>
+  </table>
+    </br>
+    </br>
+    </br>
+  <table>
+      <tr>
+          <th>Word</th>
+          <th>Answer</th>
+          <th>Correct answer</th>
+      </tr>
+      <th:block th:each="quizQuestion : ${quizQuestions}">
+          <tr>
+              <td th:text="${quizQuestion.word}"></td>
+              <td th:text="${quizAnswers2[__${quizQuestionStat.index}__]}"></td>
+              <td th:text="${quizCorrectAnswers[__${quizQuestionStat.index}__]}"></td>
+          </tr>
+      </th:block>
+  </table>
+</body>
+</html>

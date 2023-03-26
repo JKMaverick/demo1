@@ -21,6 +21,10 @@ public class QuizQuestion {
         this.translations.add(translation);
         this.correctAnswer = 0;
     }
+    public QuizQuestion(String word){
+        this.word = word;
+        this.translations = new ArrayList<>();
+    }
 
 
 }
