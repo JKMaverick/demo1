@@ -7,18 +7,20 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "quiz")
-public class QuizModel {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String username;
+    private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "quiz_id")
-    private List<QuizQuestionModel> quizQuestionModelList;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "user_id")
     private List<UsersQuizs> usersQuizsList;
+
+
+
+
 }
